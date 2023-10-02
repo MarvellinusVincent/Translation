@@ -1,6 +1,6 @@
 # Translation
 
-An app that allows users to translate English, German, and Spansish to Enlish, German, and Spanish
+An app that allows users to translate English, German, and Spansish to English, German, and Spanish
 
 ## Functionality 
 
