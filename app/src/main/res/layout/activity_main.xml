@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--This is the linear layout for the main activity-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <!--This is the linear layout for the texts of language and translation-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="horizontal">
+
+        <!--This is the soure language text view-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Source Language"
+            android:textColor="#808080" />
+
+        <!--This is the translation language text view-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Translation"
+            android:textColor="#808080" />
+
+    </LinearLayout>
+
+    <!--This is the linear layout for the buttons-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="0">
+
+        <!--This is the Radio Group for the source language-->
+        <RadioGroup
+            android:id="@+id/Language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <!--This is the radio button for english-->
+            <RadioButton
+                android:id="@+id/English_source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="English">
+
+            </RadioButton>
+
+            <!--This is the radio button for spanish-->
+            <RadioButton
+                android:id="@+id/Spanish_source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Spanish">
+
+            </RadioButton>
+
+            <!--This is the radio button for german-->
+            <RadioButton
+                android:id="@+id/German_source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="German">
+
+            </RadioButton>
+
+        </RadioGroup>
+
+        <!--This is the Radio Group for the translation language-->
+        <RadioGroup
+            android:id="@+id/Translation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <!--This is the radio button for spanish-->
+            <RadioButton
+                android:id="@+id/Spanish_translation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Spanish">
+
+            </RadioButton>
+
+            <!--This is the radio button for german-->
+            <RadioButton
+                android:id="@+id/German_translation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="German">
+
+            </RadioButton>
+
+            <!--This is the radio button for english-->
+            <RadioButton
+                android:id="@+id/English_translation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="English">
+
+            </RadioButton>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <!--This is the linear layout for the output translation text and the fragment container-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:orientation="vertical">
+
+        <!--This is the text view for the output translation text-->
+        <TextView
+            android:id="@+id/translationTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Translation"
+            android:textColor="#808080" />
+
+        <!--This is the text view for the fragment container-->
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="test"
+            android:layout_weight="1">
+        </FrameLayout>
+
+    </LinearLayout>
+</LinearLayout>
