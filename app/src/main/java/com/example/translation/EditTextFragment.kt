@@ -13,7 +13,7 @@ import com.example.translation.databinding.FragmentEditTextBinding
 /**
  * This is the edit text fragment for the user to type the text
  */
-class EditText : Fragment() {
+class EditTextFragment : Fragment() {
 
     lateinit var sharedViewModel: SharedViewModel
     private var _binding: FragmentEditTextBinding? = null

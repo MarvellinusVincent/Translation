@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-<!--This is the edit text fragment for the user to input their text-->
+    <!--This is the edit text fragment for the user to input their text-->
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Write Something" />
 
-    </LinearLayout>
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.translation
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.mlkit.common.model.DownloadConditions
@@ -28,23 +29,33 @@ class SharedViewModel: ViewModel() {
             .setTargetLanguage(targetLanguage)
             .build()
         val translator = Translation.getClient(options)
-
-        var conditions = DownloadConditions.Builder()
+        val conditions = DownloadConditions.Builder()
             .requireWifi()
             .build()
+        Log.d("SharedViewModel", "Download check, $sourceLanguage")
+        Log.d("SharedViewModel", "Download check, $targetLanguage")
+        // Download the required models for the new source and target languages if needed
         translator.downloadModelIfNeeded(conditions)
             .addOnSuccessListener {
+                Log.d("SharedViewModel", "Download successful, $sourceLanguage")
+                Log.d("SharedViewModel", "Download successful, $targetLanguage")
+                // Model downloaded successfully, it's okay to translate
                 okayToTranslate = true
+
+                // Once the model is downloaded, perform the translation
+                translator.translate(inputText)
+                    .addOnSuccessListener { translatedText ->
+                        this.translatedText.postValue(translatedText)
+                    }
+                    .addOnFailureListener { exception ->
+                        // Handle translation failure
+                    }
             }
             .addOnFailureListener {
+                Log.d("SharedViewModel", "Download failed, $sourceLanguage")
+                Log.d("SharedViewModel", "Download failed, $targetLanguage")
+                // Handle model download failure
             }
-        if (okayToTranslate) {
-            translator.translate(inputText)
-                .addOnSuccessListener { translatedText ->
-                    this.translatedText.postValue(translatedText)
-                }
-                .addOnFailureListener { exception ->
-                }
-        }
     }
+
 }

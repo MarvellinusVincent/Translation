@@ -1,10 +1,20 @@
 package com.example.translation
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.RadioButton
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.translation.databinding.ActivityMainBinding
+import com.google.android.material.button.MaterialButton
+import com.google.mlkit.nl.translate.TranslateLanguage
+import java.util.Locale
 
 /**
  * This is the main activity class
@@ -26,7 +36,7 @@ class MainActivity : AppCompatActivity() {
          * This puts the edit text fragment to the fragment container in the main activity class
          */
         if (savedInstanceState == null) {
-            val editTextFragment = EditText()
+            val editTextFragment = EditTextFragment()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragmentContainer, editTextFragment)
                 .commit()
@@ -37,33 +47,56 @@ class MainActivity : AppCompatActivity() {
          */
         sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
         sharedViewModel.translatedText.observe(this){text->
-              binding.translationTextView.text = text
+            binding.translatedTextView.text = text
         }
-
-        /**
-         * This puts the chosen source language to the shared view model
-         */
-        binding.Language.setOnCheckedChangeListener() { _, checkedSourceId ->
-            val sourceLanguage = when(view.findViewById<RadioButton>(checkedSourceId).text) {
-                "English" -> "en"
-                "Spanish" -> "es"
-                "German" -> "de"
-                else -> "es"
+        val languagesList = loadLanguages().toMutableList()
+        languagesList.add(0, Languages("", "Select Source Language"))
+        languagesList.add(1, Languages("", "Select Target Language"))
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, languagesList.map { it.languageTitle })
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val sourceLanguageSpinner = findViewById<Spinner>(R.id.sourceLanguageSpinner)
+        val targetLanguageSpinner = findViewById<Spinner>(R.id.targetLanguageSpinner)
+        val switchButton = findViewById<MaterialButton>(R.id.buttonSwitchLang)
+        sourceLanguageSpinner.adapter = adapter
+        targetLanguageSpinner.adapter = adapter
+        sourceLanguageSpinner.setSelection(0, false)
+        targetLanguageSpinner.setSelection(1, false)
+        sourceLanguageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedLanguageCode = languagesList[position].languageCode
+                Log.d("MainActivity", "sourceLanguageCode = $selectedLanguageCode")
+                sharedViewModel.sourceLanguage = selectedLanguageCode
             }
-            sharedViewModel.sourceLanguage = sourceLanguage
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
         }
-
-        /**
-         * This puts the chosen targeted language to the shared view model
-         */
-        binding.Translation.setOnCheckedChangeListener() { _, checkedTranslationId ->
-            val targetLanguage = when(view.findViewById<RadioButton>(checkedTranslationId).text) {
-                "English" -> "en"
-                "Spanish" -> "es"
-                "German" -> "de"
-                else -> "es"
+        targetLanguageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedLanguageCode = languagesList[position].languageCode
+                sharedViewModel.targetLanguage = selectedLanguageCode
+                Log.d("MainActivity", "targetLanguageCode = $selectedLanguageCode")
             }
-            sharedViewModel.targetLanguage = targetLanguage
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+        switchButton.setOnClickListener {
+            val currentSourceLanguage = sourceLanguageSpinner.selectedItemPosition
+            val currentTargetLanguage = targetLanguageSpinner.selectedItemPosition
+            sourceLanguageSpinner.setSelection(currentTargetLanguage, true)
+            targetLanguageSpinner.setSelection(currentSourceLanguage, true)
         }
     }
+    private fun loadLanguages(): List<Languages> {
+        val languages = ArrayList<Languages>()
+        val languageCodeList = TranslateLanguage.getAllLanguages()
+        for (languageCode in languageCodeList) {
+            val languageTitle = Locale(languageCode).displayLanguage
+            Log.d(TAG, "loadAvailableLanguages: languageCode: $languageCode")
+            Log.d(TAG, "loadAvailableLanguages: languageTitle: $languageTitle")
+            val modelLanguage = Languages(languageCode, languageTitle)
+            languages.add(modelLanguage)
+        }
+        return languages
+    }
+
 }
